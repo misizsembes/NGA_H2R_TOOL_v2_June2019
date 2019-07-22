@@ -1,0 +1,13 @@
+"","group","J_hand_washing_rank1","J_hand_washing_rank2","J_hand_washing_rank3","J_hand_washing_name1","J_hand_washing_name2","J_hand_washing_name3"
+"1","NG008001","1.0000",NA,NA,"Only water",NA,NA
+"2","NG008002","1.0000",NA,NA,"Only water",NA,NA
+"3","NG008003","0.9286","0.0714",NA,"Only water","J_hand_washing_soap",NA
+"4","NG008008","0.8235","0.1176","0.0588","Ash (with water)","Only water","Sand (with water)"
+"5","NG008010","1.0000",NA,NA,"Only water",NA,NA
+"6","NG008011","0.9167","0.0833",NA,"Only water","Ash (with water)",NA
+"7","NG008015","0.5000","0.5000",NA,"Only water","J_hand_washing_soap",NA
+"8","NG008016","1.0000",NA,NA,"Only water",NA,NA
+"9","NG008017","1.0000",NA,NA,"Only water",NA,NA
+"10","NG008019","1.0000",NA,NA,"Ash (with water)",NA,NA
+"11","NG008022","0.7778","0.1111","0.1111","Only water","Ash (with water)","J_hand_washing_soap"
+"12","NG008025","0.5000","0.5000",NA,"Only water","J_hand_washing_soap",NA

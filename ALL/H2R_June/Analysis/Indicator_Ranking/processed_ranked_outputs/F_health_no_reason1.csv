@@ -1,0 +1,13 @@
+"","group","F_health_no_reason1_rank1","F_health_no_reason1_rank2","F_health_no_reason1_rank3","F_health_no_reason1_rank4","F_health_no_reason1_rank5","F_health_no_reason1_name1","F_health_no_reason1_name2","F_health_no_reason1_name3","F_health_no_reason1_name4","F_health_no_reason1_name5"
+"1","NG008001","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA
+"2","NG008002","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA
+"3","NG008003","0.9167","0.0833",NA,NA,NA,"There were never health facilities nearby","F_health_no_reason1_security",NA,NA,NA
+"4","NG008008","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA
+"5","NG008010","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA
+"6","NG008011","0.6667","0.2222","0.1111",NA,NA,"Facilites were destroyed by fighting","There is no medicine available","There are no health care workers in the area",NA,NA
+"7","NG008015","0.8000","0.2000",NA,NA,NA,"There were never health facilities nearby","F_health_no_reason1_security",NA,NA,NA
+"8","NG008016","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA
+"9","NG008017","0.6667","0.3333",NA,NA,NA,"There were never health facilities nearby","Facilites were destroyed by fighting",NA,NA,NA
+"10","NG008019","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA
+"11","NG008022","0.8889","0.1111",NA,NA,NA,"There were never health facilities nearby","There are no health care workers in the area",NA,NA,NA
+"12","NG008025","1.0000",NA,NA,NA,NA,"There were never health facilities nearby",NA,NA,NA,NA

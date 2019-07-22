@@ -1,0 +1,13 @@
+"","group","F_mortality_child_rank1","F_mortality_child_rank2","F_mortality_child_rank3","F_mortality_child_rank4","F_mortality_child_rank5","F_mortality_child_name1","F_mortality_child_name2","F_mortality_child_name3","F_mortality_child_name4","F_mortality_child_name5"
+"1","NG008001","1.0000",NA,NA,NA,NA,"Other",NA,NA,NA,NA
+"2","NG008002","1.0000",NA,NA,NA,NA,"Cholera / Diarrhea",NA,NA,NA,NA
+"3","NG008003","0.4615","0.3077","0.1538","0.0769",NA,"Natural causes of death (e.g. old age)","Hunger / Malnutrition","Cholera / Diarrhea","Other",NA
+"4","NG008008","0.7778","0.1111","0.1111",NA,NA,"Hunger / Malnutrition","Cholera / Diarrhea","Malaria / Fever",NA,NA
+"5","NG008010","1.0000",NA,NA,NA,NA,"Malaria / Fever",NA,NA,NA,NA
+"6","NG008011","0.7500","0.2500",NA,NA,NA,"Hunger / Malnutrition","Cholera / Diarrhea",NA,NA,NA
+"7","NG008015","0.6667","0.3333",NA,NA,NA,"Hunger / Malnutrition","Cholera / Diarrhea",NA,NA,NA
+"8","NG008016","1.0000",NA,NA,NA,NA,"Malaria / Fever",NA,NA,NA,NA
+"9","NG008017","1.0000",NA,NA,NA,NA,"Malaria / Fever",NA,NA,NA,NA
+"10","NG008019","0.5000","0.5000",NA,NA,NA,"Hunger / Malnutrition","Malaria / Fever",NA,NA,NA
+"11","NG008022","0.6667","0.2222","0.1111",NA,NA,"Malaria / Fever","Hunger / Malnutrition","Other",NA,NA
+"12","NG008025","1.0000",NA,NA,NA,NA,"Hunger / Malnutrition",NA,NA,NA,NA
