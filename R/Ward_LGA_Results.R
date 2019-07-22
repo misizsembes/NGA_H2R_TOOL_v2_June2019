@@ -158,8 +158,6 @@ if (!require(readr)) install.packages('readr')
 library(readr)
 
 ######################FUNCTIONS######################
-
- 
  #MOVE COLUMNS--NOT MINE
  moveme <- function (invec, movecommand) {
    movecommand <- lapply(strsplit(strsplit(movecommand, ";")[[1]], 
@@ -467,7 +465,7 @@ ward_gis_select[grep("over_threshold_wards", colnames(ward_gis_select))] <- past
 ward_level_pivots<-  ward_level_pivots %>% separate(state_lga_ward, c("State", "LGA","Ward"),sep =";")
 ward_level_pivots <- dplyr:: select(ward_level_pivots, -contains("state_lga_ward"))
 setwd(ward_working_directory)
-write.csv(ward_level_pivots,paste0(ward_named_dataset,".csv"),na="")
+write.csv(ward_level_pivots,paste0(ward_named_dataset,".csv"),na="",row.names = FALSE)
 
 ####################################BEGIN LGA AGGREGATION###################################
 setwd(settlement_working_directory)
@@ -572,8 +570,6 @@ if(any(lga_global_match==FALSE)){
 } else{
   print("LGA & GLOBAL HEADERS MATCH")
 }
-#write.csv(global_level_pivots,"global_level_pivots.csv")
-#write.csv(lga_level_pivots,"lga_level_pivots.csv")
 #STACK FILES
 lga_global_stacked <- rbind(lga_level_pivots,global_level_pivots)
 lga_global_stacked <- lga_global_stacked %>% separate(geo_aggregation, c("State", "LGA"),sep =";")
@@ -583,7 +579,7 @@ colnames(lga_info)[2]<-"LGA"
 lga_global_stacked <- merge(lga_global_stacked,lga_info, by="LGA", all.x = TRUE)
 lga_global_stacked <- lga_global_stacked[moveme(names(lga_global_stacked), "ADM2_EN first")]
 setwd(lga_working_directory)
-write.csv(lga_global_stacked,paste0("LGA_GLOBAL",lga_named_dataset,".csv"),na="")
+write.csv(lga_global_stacked,paste0("LGA_GLOBAL",lga_named_dataset,".csv"),na="",row.names = FALSE)
 
 
 

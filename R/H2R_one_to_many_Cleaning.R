@@ -48,9 +48,6 @@ library(tm)
 if (!require(SDMTools)) install.packages('SDMTools')
 library(SDMTools)
 
-if (!require(dplyr)) install.packages('dplyr')
-library(dplyr)
-
 if (!require(plotly)) install.packages('plotly')
 library(plotly)
 
@@ -59,9 +56,6 @@ library(tibble)
 
 if (!require(plotly)) install.packages('plotly')
 library(plotly)
-
-if (!require(plyr)) install.packages('plyr')
-library(plyr)
 
 if (!require(tidyr)) install.packages('tidyr')
 library(tidyr)
@@ -110,6 +104,12 @@ library(car)
 
 if (!require(readr)) install.packages('readr')
 library(readr)
+
+if (!require(plyr)) install.packages('plyr')
+library(plyr)
+
+if (!require(dplyr)) install.packages('dplyr')
+library(dplyr)
 
 #if (!require(tidyverse)) install.packages('tidyverse')
 #library(tidyverse)
@@ -204,7 +204,6 @@ for(f in 1:length(folders)){  #FOLDER BEGIN
 
 ##############BEGIN CHANGE HEADERS##############
     colnames(uncleaned) <- gsub(header_delimiter, "_", colnames(uncleaned))
-    
     #REMOVE DUPLICATE COLUMNS
     uncleaned <- uncleaned[, !duplicated(colnames(uncleaned))]
     ##############END CHANGE HEADERS##############
@@ -224,7 +223,9 @@ for(f in 1:length(folders)){  #FOLDER BEGIN
   #NOTE--FIX "_uuid" to "uuid"
       cleaning_log$question <- str_replace( cleaning_log$question, "_uuid", "uuid")
     #LIST OF QUESTIONS IN THE CLEANING LOG SUBSET
-      cleaning_log_nulls <- cleaning_log %>% dplyr::filter(new == "NULL" ) 
+  #    detach("package:plyr")
+   #   library(dplyr)    
+        cleaning_log_nulls <- cleaning_log %>% dplyr::filter(new == "NULL" ) 
        null_entries <- as.character(cleaning_log_nulls$uuid)
       cleaning_log_no_null <- cleaning_log %>% dplyr::filter(!uuid %in% c(null_entries))
     colquestion <- as.character(unique(cleaning_log_no_null$question))
