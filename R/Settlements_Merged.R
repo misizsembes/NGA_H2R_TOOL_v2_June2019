@@ -7,7 +7,7 @@ gis_data_file <- "Wards_X_GRID3_number-settlements.xlsx"
 gis_data_sheet <-  "Feuil1"
 
 #KOBO FILE TO OPEN--"CLEANED" DATASET
-CLEANED_DATASET <- "cleanedh2r_2019-07-22_JUNE_JULY_REACH_NGA_Tool_H2RQuant_NEW_KII_23_05_2019_final_2019_07_12_16_06_21_REACH_NGA_Tool_H2RQuant_NEW_KII"
+CLEANED_DATASET <- "cleanedh2r_2019-07-23_H2RQuant_NEW_KII_23_05_2019_final_2019_07_12_REACH_NGA_Tool_H2RQuant_NEW_KII"
 cleaned_excel_sheet_name = "REACH_NGA_Tool_H2RQuant_NEW_KII"  #IGNORE If THE FILE IS A CSV
 
 #DATA YEAR: DOES NOT MATTER IF "ALL" MONTHS ARE AGGREGATED 
@@ -45,6 +45,9 @@ library(ggplot2)
 
 if (!require(reshape2)) install.packages('reshape2')
 library(reshape2)
+
+if (!require(writexl)) install.packages('writexl')
+library(writexl)
 
 if (!require(data.table)) install.packages('data.table')
 library(data.table)
@@ -452,7 +455,7 @@ settlement_numbers_old<-NULL
 Settlement1a<-merge(settlement_yes, settlement_no, by = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement") )
 Settlement1b<-merge(settlement_equal, settlement_recent, by = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement") )
 Settlement1c<-merge(Settlement1a, Settlement1b, by = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement") )
-settlement<-merge(Settlement1c, settlement_numbers, by = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement") )
+settlement<-merge(Settlement1c, settlement_numbers, by = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement"),all.x=TRUE )
 #settlement<-merge(Settlement1d, settlement_frequency, by = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement") )
 
 # #Let us rearrange the columns in our database inthe same order appear on the tool
@@ -556,7 +559,6 @@ settlement$N_prevent_info_what[settlement$N_prevent_info != "yes"] <- "SL"
 ## Filling in all blank values
 
 settlement[settlement == ""] <- "NC"
-settlement$settlement_ward_lga <-  paste(settlement$C_info_settlement_final,settlement$C_info_ward,settlement$C_info_lga,sep=";")
 
 ## Counting KI coverage per village!
 
@@ -567,12 +569,13 @@ ki_coverage <- d.f %>%
   ungroup()
 colnames(ki_coverage)[ncol(ki_coverage)]  <- "ki_coverage"
 
-ki_coverage$settlement_ward_lga <- paste(ki_coverage$C_info_settlement,ki_coverage$C_info_ward,ki_coverage$C_info_lga,sep=";")
+ki_coverage$settlement_ward_lga <- paste0(ki_coverage$C_info_settlement,";",ki_coverage$C_info_ward,";",ki_coverage$C_info_lga)
 ki_coverage <- ki_coverage %>% dplyr:: select(ki_coverage,settlement_ward_lga)
 #JOIN
+settlement$settlement_ward_lga <-  paste0(settlement$C_info_settlement,";",settlement$C_info_ward,";",settlement$C_info_lga)
 settlement <- merge(settlement,ki_coverage, by="settlement_ward_lga",all.x=TRUE)
 #MOVE KI COVERAGE TO THE BEGINNING OF THE DATASET
-settlement<-settlement[moveme(names(settlement), "ki_coverage first")]
+#settlement<-settlement[moveme(names(settlement), "ki_coverage first")]
 
 ## Adding month columns
 
@@ -637,6 +640,6 @@ settlement$lga_prcnt20ov_yn <- ifelse(settlement$lga_prcnt_of_H2R>=threshold,1,0
 #CHANGE WORKING DIRECTORY & EXPORT
 settlement$onesz <- NULL
 setwd(paste0(parent_folder,"/",analysis_folder,"/","Settlements_Merged"))
-write.csv(settlement, AGGREGATED_DATASET, na = "NC", row.names = TRUE)
+write.csv(settlement, paste0("consensus_", AGGREGATED_DATASET), na = "NC", row.names = FALSE)
 
 

@@ -5,7 +5,7 @@ parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_June"
 uncleaned_data_file_type <- "EXCEL"
 
 #NAME OF EXCEL/CSV FILE WHERE CLEANING LOG IS STORED
-cleaning_name <- "JUNE_JULY_REACH_NGA_Tool_H2RQuant_NEW_KII_23_05_2019_final_2019_07_12_16_06_21" 
+cleaning_name <- "H2RQuant_NEW_KII_23_05_2019_final_2019_07_12" 
 cleaning_log_org_excel_sheet <- "log"  #CLEANING LOG EXCEL SHEET NAME (IF EXCEL)
 
 #HEADER DELIMITER OF COLUMN NAMES
