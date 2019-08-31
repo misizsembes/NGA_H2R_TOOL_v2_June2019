@@ -1,13 +1,13 @@
 #THE FOLDER WHERE UNCLEANED/RAW DATA IS STORED
-parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_June"
+parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_August"
 
 #UNLCEANED DATA == "CSV" OR "EXCEL"
 uncleaned_data_file_type <- "EXCEL"
 
 #NAME OF EXCEL/CSV FILE WHERE CLEANING LOG IS STORED
-cleaning_name <- "H2RQuant_NEW_KII_23_05_2019_final_2019_07_12" 
+cleaning_name <- "REACH_NGA_Tool_H2RQuant_NEW_KII_19_08_2019_final_2019_08_20_07_33_15" 
 cleaning_log_org_excel_sheet <- "log"  #CLEANING LOG EXCEL SHEET NAME (IF EXCEL)
-
+short_name <- 'H2R_August2019'
 #HEADER DELIMITER OF COLUMN NAMES
 header_delimiter <- "/"
 alt_id <-  "_index"  #IF NOT ALL ID COLUMNS ARE UUID, DEFINE THE ALTERNATIVE (FOR KOBO LOOPS)
@@ -315,7 +315,7 @@ for(f in 1:length(folders)){  #FOLDER BEGIN
    } else{
      cleaned_up <- cleaned_up 
    }
-   write.csv(cleaned_up,paste0(folders[f],"/",updated_data_folder,"/","cleanedh2r_",Sys.Date(),"_", survey_name,"_", sheets[s], ".csv") ,na = "")
+   write.csv(cleaned_up,paste0(folders[f],"/",updated_data_folder,"/","cleanedh2r_", short_name,"_", sheets[s], ".csv") ,na = "")
     } #SHEET END
     cleaning_dataset_list[[j]] <- cleaning_sheet_list
     } #SURVEY END
@@ -380,4 +380,4 @@ cleaning_log_all_updated$index_number <- NULL
 cleaning_log_all_updated$uuid <- NULL
 names(cleaning_log_all_updated) <- names(cleaning_log_real_org)
 
-write.csv(cleaning_log_all_updated,paste0(cleaning_log_import_folder,"/",cleaning_output_folder,"/","UPDATED_CLEANING_LOG_",Sys.Date(),"_",cleaning_name,".csv"), na = "")
+write.csv(cleaning_log_all_updated,paste0(cleaning_log_import_folder,"/",cleaning_output_folder,"/","UPDATED_CLEANING_LOG_",short_name,".csv"), na = "")

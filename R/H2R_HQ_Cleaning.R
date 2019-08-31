@@ -3,6 +3,8 @@ parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_June"
 #DEFINE RAW DATA
 dataset <- "JUNE_JULY_REACH_NGA_Tool_H2RQuant_NEW_KII_23_05_2019_final_2019_07_12_16_06_21"
 sheet <- "REACH_NGA_Tool_H2RQuant_NEW_KII"
+#NAMES 
+unneeded_indicators <- c("B__geopoint_precision","deviceid","B__geopoint_altitude","_index")
 
 hq_cleaning_checks <- function(datasett,output_folder,id_indicator_name, unnecessary_indicators ){
 #CREATE INDEX IN DATASET
@@ -51,7 +53,6 @@ raw_data_folder <- "Raw_Data" #DO NOT CHANGE
 #LOAD DATA
 dataa <- read_excel(paste0(raw_data_folder,"/",dataset,".xlsx"),sheet = sheet) #DO NOT CHANGE
 #RUN HQ CLEANING
-unneeded_indicators <- c("B__geopoint_precision","deviceid","B__geopoint_altitude","_index")
 hq_cleaning_checks(dataa, "HQ_Cleaning", "uuid",unneeded_indicators)
 
 

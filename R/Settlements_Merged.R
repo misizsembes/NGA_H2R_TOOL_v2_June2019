@@ -1,23 +1,22 @@
 # Working directory
-parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_June"
+parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_August"
 #"EXCEL" OR "CSV" KOBO OUTPUT
 output_type <- "CSV"
 #GIS FILE
 gis_data_file <- "Wards_X_GRID3_number-settlements.xlsx"
 gis_data_sheet <-  "Feuil1"
-
 #KOBO FILE TO OPEN--"CLEANED" DATASET
-CLEANED_DATASET <- "cleanedh2r_2019-07-23_H2RQuant_NEW_KII_23_05_2019_final_2019_07_12_REACH_NGA_Tool_H2RQuant_NEW_KII"
+CLEANED_DATASET <- "cleanedh2r_H2R_August2019_REACH_NGA_Tool_H2RQuant_NEW_KII"
 cleaned_excel_sheet_name = "REACH_NGA_Tool_H2RQuant_NEW_KII"  #IGNORE If THE FILE IS A CSV
-
+#SHORT NAME OF THE OUTPUT FILE
+short_name<- "H2R_August"
 #DATA YEAR: DOES NOT MATTER IF "ALL" MONTHS ARE AGGREGATED 
 #2018 = "18"; 2021 = "21" etc... (text)
-year_data<- "ALL"
-
+year_data<- "19"
 #CHOOSE MONTH: "ALL"; otherwise "01" to "12" (characters)
-month_choose <- "ALL"
-
-threshold <- 0.05 # % of SETTLEMENT THRESHOLD
+month_choose <- "08"
+## % of SETTLEMENT THRESHOLD--WARDS & LGAs
+threshold <- 0.05 
 #######################################LOAD PACKAGES##########################################
 if (!require(readxl)) install.packages('readxl')
 library(readxl)
@@ -348,9 +347,12 @@ print("KOBO OUTPUT = EXCEL")
 ## Let's remove columns we don't need. Notes first, no data in those!!
 d.f <- dplyr::select(d.f, everything(), -contains("X_notes"))
 #REMOVE "category_ok_" from column headers
+names(d.f) <- gsub(x = names(d.f), pattern = "/", replacement = "_") 
 names(d.f) <- gsub(x = names(d.f), pattern = "category_ok_", replacement = "")
-names(d.f) <- gsub(x = names(d.f), pattern = "/", replacement = "_")
+
 d.f <- data.frame(d.f)
+
+colnames(d.f)[grep("^N_info_source$",colnames(d.f))] <- "N_info_source_main"
 
 #CALCULATE THE MONTH CREATED
 d.f$new_date <-sub("\\T.*","",d.f$end)
@@ -363,6 +365,7 @@ d.f <- subset(d.f, month==month_choose)
   d.f <- d.f
 }
 
+
 ## CREATING THE SETTLEMENTS DATASET WOOHOO!
 settlement_yes <- d.f %>%
   dplyr:: select(C_info_state, C_info_lga, C_info_ward, C_info_settlement,D_D1_hc_now,D_D1_insurgents_settlements, D_D2_idp_now, D_D2_idp_abductee, D_D3_returnees_now, 
@@ -372,7 +375,7 @@ settlement_yes <- d.f %>%
                  G_disputes_violence, G_detained_childer,G_detained_adult,G_enslaved_labor, G_move_men,G_move_women,G_lighting, G_night_walk, G_abduction_girls, G_abduction_boys, G_suicide_bombing, 
                  I_I2_shelter_open_yn, I_shelter_damage, I_shelter_flooding, I_nfi_distribution, J_water_boreholes, J_water_boreholes_functional, J_water_source_animals,
                  J_water_source_seasonal,    J_water_safety, J_latrine_now, K_edu_now, K_edu_girl_formal, K_edu_girl_informal, K_edu_boy_formal, K_edu_boy_informal,
-                 D_D1_community_leadership, G_mines, G_mine_acc_numb, N_cellphone_existing,N_cellphoneallowed,N_radio_allowed,N_radio_existing, N_mobilephone, N_prevent_info) %>%
+                 D_D1_community_leadership, G_mines, G_mine_acc_numb, N_cellphone_existing,N_cellphoneallowed,N_radio_allowed,N_radio_existing, N_mobilephone, N_prevent_info_main) %>%
   dplyr::group_by_(.dots = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement")) %>% ## .dots basically accepts the column values for the function. In this function, we are saying group by the three columns listed!
   dplyr::  summarise_all(funs(aok_yes))
 
@@ -386,7 +389,7 @@ settlement_no <- d.f %>%
 ## Let us apply the "aok_mode" function to these set of columns
 settlement_equal <- d.f %>%
   dplyr::  select(C_info_state, C_info_lga, C_info_ward,C_info_settlement, D_D1_hc_remain_perc, D_D2_idp_perc, D_D2_idp_source_state, D_D2_idp_source_lga,
-                  D_D4_child_perc, D_D4_pregnant_lactating_perc, E_food_no_reason1, E_food_now_type_fruit,
+                  D_D3_returnee_type, D_D4_child_perc, D_D4_pregnant_lactating_perc,D_D4_remain_reason, E_food_no_reason1, E_food_now_type_fruit,
                   E_food_now_type_main_staples, E_food_now_type_meat, E_food_now_type_pulses, E_food_now_type_milk_dairy, E_food_now_type_vegetables,
                   E_food_source, E_meals_number, E_food_coping_consumption_borrow_food, E_food_coping_consumption_less_expensive_food,
                   E_food_coping_consumption_limit_meal_size, E_food_coping_consumption_wild_food, E_food_coping_consumption_only_children_eat,
@@ -416,7 +419,7 @@ settlement_equal <- d.f %>%
                   J_latrine_usage, J_latrine_no_usage, J_hand_washing, K_edu_no_reason, K_edu_girl_formal_attendance, K_edu_girl_informal_attendance,
                   K_attendance_no_reason1_girls, K_edu_boy_formal_attendance, K_edu_boy_informal_attendance, K_attendance_no_reason1_boys,
                   D_D1_community_leadership_groups_youth, D_D1_community_leadership_groups_women, D_D1_community_leadership_groups_elderly,
-                  D_D1_community_leadership_groups_disabled, D_D1_community_leadership_groups_none, N_info_source, N_info_source_who, N_electricity,
+                  D_D1_community_leadership_groups_disabled, D_D1_community_leadership_groups_none, N_info_source_main, N_info_source_who, N_electricity,
                   N_prevent_info_how, N_prevent_info_what, N_info_trust) %>%
   dplyr:: group_by_(.dots = c("C_info_state", "C_info_lga", "C_info_ward", "C_info_settlement")) %>% ## .dots basically accepts the column values for the function. In this function, we are saying group by the three columns listed!
   dplyr::  summarise_all(funs(AoK))
@@ -640,6 +643,6 @@ settlement$lga_prcnt20ov_yn <- ifelse(settlement$lga_prcnt_of_H2R>=threshold,1,0
 #CHANGE WORKING DIRECTORY & EXPORT
 settlement$onesz <- NULL
 setwd(paste0(parent_folder,"/",analysis_folder,"/","Settlements_Merged"))
-write.csv(settlement, paste0("consensus_", AGGREGATED_DATASET), na = "NC", row.names = FALSE)
+write.csv(settlement, paste0("consensus_", short_name,".csv"), na = "NC", row.names = FALSE)
 
 

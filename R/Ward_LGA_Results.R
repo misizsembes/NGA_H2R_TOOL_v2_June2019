@@ -1,14 +1,14 @@
 #PARENT FOLDER
-parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_June"
+parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_August"
 #H2R EXCEL SHEET--NAME OF SETTLEMENT MERGED FILE
-h2r_csv <- "consensus_cleanedh2r_2019-07-23_H2RQuant_NEW_KII_23_05_2019_final_2019_07_12_REACH_NGA_Tool_H2RQuant_NEW_KII"
+h2r_csv <- "consensus_H2R_August"
 #GIS FILE NAME
 gis_file_name <- "Wards_X_GRID3_number-settlements.xlsx"
 gis_sheet_name <- "Feuil1"
-
+#DEFINE THRESHOLD (% OF SETTLEMENTS per-LGA (and ward))
 threshold <- 0.05  # % OF SETTLEMENTS THRESHOLD
  #"ALL"; otherwise "01" to "12" (characters)
- month_choose <- "ALL"
+ month_choose <- "08"
  ##############################################################################
  #SET WORKING DIRECTORY
  setwd(parent_folder)
@@ -20,7 +20,6 @@ threshold <- 0.05  # % OF SETTLEMENTS THRESHOLD
  ward_working_directory <- paste0(parent_folder,"/",analysis_folder,"/","Ward_Results")
  lga_working_directory <- paste0(parent_folder,"/",analysis_folder,"/","LGA_Results")
  global_working_directory <- paste0(parent_folder,"/",analysis_folder,"/","Global_Results")
- 
  #SETTLEMENT PATH
  settlement_working_directory <- paste0(parent_folder,"/",analysis_folder,"/","Settlements_Merged")  #DO NOT TOUCH
  #HARD TO REACH DATA
@@ -40,17 +39,17 @@ threshold <- 0.05  # % OF SETTLEMENTS THRESHOLD
  
  #LGA FILE NAMES
  if(month_choose !="ALL"){
-   lga_named_dataset <- paste0("H2R_LGA_Results_",substrRight(h2r_csv, 5) )
+   lga_named_dataset <- gsub("consensus_", "LGA_Results_", h2r_csv)
  } else if (month_choose =="ALL"){
-   lga_named_dataset <- gsub("Settlements_Merged", "LGA_Results", h2r_csv)
+   lga_named_dataset <- gsub("consensus_", "ALL_LGA_Results_", h2r_csv)
  } else{ lga_named_dataset <- "NO_NAME"
  }
  
  #GLOBAL FILE NAMES
  if(month_choose !="ALL"){
-   global_named_dataset <- paste0("H2R_GLOBAL_Results_",substrRight(h2r_csv, 5) )
+   global_named_dataset <- gsub("consensus_", "H2R_GLOBAL_Results_", h2r_csv)
  } else if (month_choose =="ALL"){
-   global_named_dataset <- gsub("Settlements_Merged", "GLOBAL_Results", h2r_csv)
+   global_named_dataset <- gsub("consensus_", "GLOBAL_Results", h2r_csv)
  } else{ global_named_dataset <- "NO_NAME"
  }
  
@@ -450,8 +449,10 @@ colnames(wards_settlment_cnt)[2] <- "h2r_settlement_cnt"
 h2r_cleaned_data$state_lga_ward <- paste0(h2r_cleaned_data$C_info_state, ";",h2r_cleaned_data$C_info_lga, ";",h2r_cleaned_data$C_info_ward )
 
 #NUM OF KIs--WARDS
-wards_KI_cnt <-  dcast(h2r_cleaned_data,state_lga_ward ~onesz, fun.aggregate = sum,value.var="ki_coverage", na.rm=TRUE)
-colnames(wards_KI_cnt)[2] <- "ki_cnt"
+#CHANGE KI_CNT TO NUMERIC
+h2r_cleaned_data$ki_coverage %<>% as.numeric
+wards_ki_cnt <-  dcast(h2r_cleaned_data,state_lga_ward ~onesz, fun.aggregate = sum,value.var="ki_coverage", na.rm=TRUE)
+colnames(wards_ki_cnt)[2] <- "ki_cnt"
 
 #RUN PIVOT
 ward_level_pivots <- agg_pivot(h2r_cleaned_data,"D_D1_hc_now","L_idp_leadership","state_lga_ward")
@@ -463,7 +464,7 @@ ward_gis_select <- merge(ward_gis_select,wards_settlment_cnt, by="state_lga_ward
 ward_gis_select$pr_settlments <-  ward_gis_select$h2r_settlement_cnt/ward_gis_select$gis_settlment_cnt
 ward_gis_select$pr_settlments <- ceiling(ward_gis_select$pr_settlments/0.005)*0.005
 ward_gis_select$over_threshold_wards <- ifelse(ward_gis_select$pr_settlments>=threshold,1,0)
-ward_gis_select <- merge(ward_gis_select, wards_KI_cnt, by= "state_lga_ward",all.x=TRUE)
+ward_gis_select <- merge(ward_gis_select, wards_ki_cnt, by= "state_lga_ward",all.x=TRUE)
 #write.csv(ward_level_pivots, "lookat2.csv")
 #JOIN TO GIS AND SUBSET ONLY WARDS OVER THE THRESHOLD OF the % OF SETTLEMENTS
 ward_level_pivots <- merge(ward_level_pivots, ward_gis_select, by="state_lga_ward", all.x=TRUE)
@@ -474,7 +475,7 @@ ward_gis_select[grep("over_threshold_wards", colnames(ward_gis_select))] <- past
 ward_level_pivots<-  ward_level_pivots %>% separate(state_lga_ward, c("State", "LGA","Ward"),sep =";")
 ward_level_pivots <- dplyr:: select(ward_level_pivots, -contains("state_lga_ward"))
 setwd(ward_working_directory)
-write.csv(ward_level_pivots,paste0(ward_named_dataset,".csv"),na="",row.names = FALSE)
+write.csv(ward_level_pivots,paste0("WARDS_",ward_named_dataset,".csv"),na="",row.names = FALSE)
 
 ####################################BEGIN LGA AGGREGATION###################################
 setwd(settlement_working_directory)
@@ -501,9 +502,10 @@ lga_settlment_cnt <- h2r_cleaned_data %>% dcast(state_lga~onesz, fun.aggregate =
 colnames(lga_settlment_cnt)[2] <- "h2r_settlement_cnt"
 
 #NUM OF KIs--LGAS
-lga_KI_cnt <-  dcast(h2r_cleaned_data,state_lga ~onesz, fun.aggregate = sum,value.var="ki_coverage", na.rm=TRUE)
-colnames(lga_KI_cnt)[2] <- "ki_cnt"
-
+#CHANGE KI_CNT TO NUMERIC
+h2r_cleaned_data$ki_coverage %<>% as.numeric
+lga_ki_cnt <-  dcast(h2r_cleaned_data,state_lga ~onesz, fun.aggregate = sum,value.var="ki_coverage", na.rm=TRUE)
+colnames(lga_ki_cnt)[2] <- "ki_cnt"
 ##########################LGA PIVOTS##########################
 #RUN PIVOT
 lga_level_pivots <- agg_pivot(h2r_cleaned_data,"D_D1_hc_now","L_idp_leadership","state_lga")
@@ -519,9 +521,11 @@ lga_look_gis_percent$pr_settlments <- ceiling(lga_look_gis_percent$pr_settlments
 lga_look_gis_percent$over_threshold_lgas <- ifelse(lga_look_gis_percent$pr_settlments>=threshold,1,0)
 #JOIN GIS SETTLEMENT COUNTS AND SUBSET ONLY THOSE OVER THE THRESHOLD OF % OF SETTLEMENTS
 lga_level_pivots <- merge(lga_level_pivots, lga_look_gis_percent, by="state_lga", all.x=TRUE)
-lga_level_pivots <- merge(lga_level_pivots, lga_KI_cnt, by="state_lga", all.x=TRUE)
+lga_level_pivots <- merge(lga_level_pivots, lga_ki_cnt, by="state_lga", all.x=TRUE)
 allreported_gis_settlement_cnt <- sum(lga_level_pivots$gis_settlment_cnt)
 lga_level_pivots <- dplyr::filter(lga_level_pivots,over_threshold_lgas==1)
+print(getwd())
+write.csv(lga_level_pivots,"look.csv")
 if(nrow(lga_level_pivots)==0){
   lga_level_pivots <- dplyr:: select(lga_level_pivots, -contains("state_lga."))
   print("NO LGAs AT OR ABOVE THRESHOLD")
@@ -559,8 +563,10 @@ global_settlment_cnt <- h2r_cleaned_data %>% dcast(onesz~onesz, fun.aggregate = 
 global_settlment_cnt[1] <- NULL
 
 #NUM OF KIs--LGAS
-global_KI_cnt <-  dcast(h2r_cleaned_data,onesz ~onesz, fun.aggregate = sum,value.var="ki_coverage", na.rm=TRUE)
-global_KI_cnt[1] <- NULL
+#CHANGE KI_CNT TO NUMERIC
+h2r_cleaned_data$ki_coverage %<>% as.numeric
+global_ki_cnt <-  dcast(h2r_cleaned_data,onesz ~onesz, fun.aggregate = sum,value.var="ki_coverage", na.rm=TRUE)
+global_ki_cnt[1] <- NULL
 
 ##########################GLOBAL PIVOTS##########################
 #RUN PIVOT
@@ -569,7 +575,7 @@ global_level_pivots <- agg_pivot(h2r_cleaned_data,"D_D1_hc_now","L_idp_leadershi
 global_level_pivots <- global_level_pivots %>% dplyr:: select(-contains("onesz")) #%>% dplyr:: select(contains("pr_"))
 global_level_pivots$gis_settlment_cnt <- allreported_gis_settlement_cnt
 global_level_pivots$h2r_settlement_cnt <- global_settlment_cnt[1,]
-global_level_pivots$ki_cnt <- global_KI_cnt[1,]
+global_level_pivots$ki_cnt <- global_ki_cnt[1,]
 
 setwd(global_working_directory)
 write.csv(global_level_pivots,paste0("WIDE_",global_named_dataset,".csv"),na="")
@@ -623,6 +629,7 @@ map_col[nrow(geo_cols),] <- ""
 names(map_col) <- maps
 
 #KEEP settlement COLUMNS
+
 settlement_cols <- lga_global_stacked %>% dplyr::select(gis_settlment_cnt,h2r_settlement_cnt,ki_cnt)
 
 #KEEP ONLY PERCENT COLUMNS
@@ -631,9 +638,21 @@ lga_global_stacked_props <- round(lga_global_stacked_props*100,0)
 
 #COMBINE DATAFRAME PIECES
 lga_global_stacked <- cbind(geo_cols,map_col,lga_global_stacked_props,settlement_cols)
+#REMOVE NO/FALSE RESPONSES
+lga_global_stacked <- lga_global_stacked %>% dplyr::select(-contains("_FALSE")) #%>%
+ #dplyr::select(-ends_with("_no"))
 #EXPORT
 setwd(lga_working_directory)
-write.csv(lga_global_stacked,paste0("LGA_GLOBAL",lga_named_dataset,".csv"),na="",row.names = FALSE)
+write.csv(lga_global_stacked,paste0("LGA_GLOBAL_",lga_named_dataset,".csv"),na="",row.names = FALSE)
+#write_xlsx(lga_global_stacked, paste0("LGA_GLOBAL",lga_named_dataset,".xlsx"))
 
 
-write_xlsx(lga_global_stacked, paste0("LGA_GLOBAL",lga_named_dataset,".xlsx"))
+
+
+
+
+
+
+
+
+
