@@ -1,20 +1,20 @@
 # Working directory
-parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_August"
+parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_SEPT_SO"
 #"EXCEL" OR "CSV" KOBO OUTPUT
 output_type <- "CSV"
 #GIS FILE
 gis_data_file <- "Wards_X_GRID3_number-settlements.xlsx"
 gis_data_sheet <-  "Feuil1"
 #KOBO FILE TO OPEN--"CLEANED" DATASET
-CLEANED_DATASET <- "cleanedh2r_H2R_August2019_REACH_NGA_Tool_H2RQuant_NEW_KII"
+CLEANED_DATASET <- "cleanned_june_september_H2R_dataset"
 cleaned_excel_sheet_name = "REACH_NGA_Tool_H2RQuant_NEW_KII"  #IGNORE If THE FILE IS A CSV
 #SHORT NAME OF THE OUTPUT FILE
-short_name<- "H2R_August"
+short_name<- "H2R_sept"
 #DATA YEAR: DOES NOT MATTER IF "ALL" MONTHS ARE AGGREGATED 
 #2018 = "18"; 2021 = "21" etc... (text)
 year_data<- "19"
 #CHOOSE MONTH: "ALL"; otherwise "01" to "12" (characters)
-month_choose <- "08"
+month_choose <- "09"
 ## % of SETTLEMENT THRESHOLD--WARDS & LGAs
 threshold <- 0.05 
 #######################################LOAD PACKAGES##########################################

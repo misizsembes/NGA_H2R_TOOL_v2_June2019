@@ -1,14 +1,14 @@
 #PARENT FOLDER
-parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_August"
+parent_folder <- "~/Desktop/Nigeria/Hard_to_reach/New_Organization/H2R_SEPT_SO"
 #H2R EXCEL SHEET--NAME OF SETTLEMENT MERGED FILE
-h2r_csv <- "consensus_H2R_August"
+h2r_csv <- "consensus_H2R_sept"
 #GIS FILE NAME
 gis_file_name <- "Wards_X_GRID3_number-settlements.xlsx"
 gis_sheet_name <- "Feuil1"
 #DEFINE THRESHOLD (% OF SETTLEMENTS per-LGA (and ward))
 threshold <- 0.05  # % OF SETTLEMENTS THRESHOLD
  #"ALL"; otherwise "01" to "12" (characters)
- month_choose <- "08"
+ month_choose <- "09"
  ##############################################################################
  #SET WORKING DIRECTORY
  setwd(parent_folder)
